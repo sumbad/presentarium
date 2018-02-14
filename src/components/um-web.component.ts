@@ -97,8 +97,6 @@ export abstract class UmWebComponent extends HTMLElement {
  */
 export function Define(nameTag: string) {
   return (originalConstructor: new (...args) => any) => {
-    console.warn(nameTag)
-    
     try {
       customElements.define(nameTag, originalConstructor);
     } catch (error) {

@@ -1,10 +1,11 @@
 {
   "name": "presentarium",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "web component for presentations",
   "main": "dist/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --progress --verbose --hide-modules --config webpack/webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

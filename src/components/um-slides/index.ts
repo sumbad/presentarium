@@ -4,11 +4,7 @@ import 'velocity-animate/velocity.ui';
 import { Define, UmWebComponent } from 'components/um-web.component';
 
 declare const $: any;
-
 import template from './template';
-// import slides, { styles as slidesStyle } from './slides';
-
-// import './um-slide';
 
 
 
@@ -20,7 +16,7 @@ export class SlidesComponent extends UmWebComponent {
   nextArrow: Element;
   prevArrow: Element;
   verticalNav: any;
-  sectionsAvailable: any;
+  sectionsAvailable: Element[];
   animating: boolean;
   actual: number;
   scrollThreshold: number;
@@ -34,10 +30,16 @@ export class SlidesComponent extends UmWebComponent {
 
 
   constructor() {
-    super(template, require('./style.scss'));
+    super(template, require('./style.scss'), true);
+
+    // special stiles for um-slide component
+    const commonStyle = document.createElement('style');
+    commonStyle.textContent = require('./common.scss');
+    this.insertBefore(commonStyle, this.firstChild);
 
     // const html = this.wire();
     this.slides = this.innerHTML;
+    // console.log(this.slides)
 
     this.scrollAnimation = this.scrollAnimation.bind(this);
     this.nextSection = this.nextSection.bind(this);
@@ -56,9 +58,7 @@ export class SlidesComponent extends UmWebComponent {
     this.actual = 1;
     this.animating = false;
 
-    this.sectionsAvailable = this.querySelectorAll('um-slide');//this.wire() `${{ html: this.slides }}`;
-
-    console.log(this.sectionsAvailable)
+    this.sectionsAvailable = Array.from(this.querySelectorAll('um-slide'));//this.wire() `${{ html: this.slides }}`;
 
     this.render();
     this.registerEffectVelocity();
@@ -66,17 +66,16 @@ export class SlidesComponent extends UmWebComponent {
     // this.sectionsAvailable = this.sectionsAvailable.childNodes;
     // $('.cd-section');
 
-    this.verticalNav = $('.cd-vertical-nav');
-    this.prevArrow = this.verticalNav.find('a.cd-prev')[0];
-    this.nextArrow = this.verticalNav.find('a.cd-next')[0];
+    this.verticalNav = (<ShadowRoot>this.shadowRoot).querySelector('.cd-vertical-nav');//$('.cd-vertical-nav');
+    this.prevArrow = this.verticalNav.querySelector('a.cd-prev');//this.verticalNav.find('a.cd-prev')[0];
+    this.nextArrow = this.verticalNav.querySelector('a.cd-next');//this.verticalNav.find('a.cd-next')[0];
+
 
     //check the media query and bind corresponding events
     let MQ = this.deviceType();
     let bindToggle = false;
 
     this.bindEvents(MQ, true);
-
-    console.log(MQ)
 
     $(window).on('resize', () => {
       MQ = this.deviceType();
@@ -88,15 +87,16 @@ export class SlidesComponent extends UmWebComponent {
 
 
   bindEvents(MQ, bool) {
+
     if (MQ == 'desktop' && bool) {
       //bind the animation to the window scroll event, arrows click and keyboard
-      if (this.hijacking == 'on') {
-        // this.initHijacking();
-        // window.addEventListener('DOMMouseScroll mousewheel', this.scrollHijacking.bind(this));
-      } else {
-        this.scrollAnimation();
-        window.addEventListener('scroll', this.scrollAnimation);
-      }
+      // if (this.hijacking == 'on') {
+      //   // this.initHijacking();
+      //   // window.addEventListener('DOMMouseScroll mousewheel', this.scrollHijacking.bind(this));
+      // } else {
+      this.scrollAnimation();
+      window.addEventListener('scroll', this.scrollAnimation);
+      // }
 
       this.prevArrow.addEventListener('click', this.prevSection);
       this.nextArrow.addEventListener('click', this.nextSection);
@@ -123,7 +123,7 @@ export class SlidesComponent extends UmWebComponent {
     } else
       if (event.which === 38
         && (!this.prevArrow.classList.contains('inactive')
-          || (this.prevArrow.classList.contains('inactive') && $(window).scrollTop() != this.sectionsAvailable.eq(0).offset().top)
+          //   || (this.prevArrow.classList.contains('inactive') && $(window).scrollTop() != (this.sectionsAvailable as any).eq(0).offset().top)
         )
       ) {
         event.preventDefault();
@@ -136,7 +136,6 @@ export class SlidesComponent extends UmWebComponent {
    * normal scroll - use requestAnimationFrame (if defined) to optimize performance
    */
   scrollAnimation() {
-    // console.log(11111111111);
     //normal scroll - use requestAnimationFrame (if defined) to optimize performance
     (!window.requestAnimationFrame)
       ? this.animateSection()
@@ -240,13 +239,13 @@ export class SlidesComponent extends UmWebComponent {
    */
   prevSection(event?) {
     typeof event !== 'undefined' && event.preventDefault();
-    let visibleSectionIndex = (this.sectionsAvailable as Element[]).findIndex(element => element.hasAttribute('visible'));
+    let visibleSectionIndex = this.sectionsAvailable.findIndex(element => element.hasAttribute('visible'));
     let visibleSection: Element = this.sectionsAvailable[visibleSectionIndex];
     let prevSection: Element = this.sectionsAvailable[visibleSectionIndex - 1];
 
     const middleScroll = (this.hijacking == 'off' && $(window).scrollTop() != $(visibleSection).offset().top) ? true : false;
     if (middleScroll && this.animating && this.animatingType === 'next') {
-      console.log('middleScroll prevSection', middleScroll)
+      // console.log('middleScroll prevSection', middleScroll)
       visibleSectionIndex++;
       visibleSection = this.sectionsAvailable[visibleSectionIndex];
       prevSection = this.sectionsAvailable[visibleSectionIndex - 1];
@@ -275,14 +274,20 @@ export class SlidesComponent extends UmWebComponent {
   nextSection(event?) {
     typeof event !== 'undefined' && event.preventDefault();
 
-    let visibleSectionIndex = (this.sectionsAvailable as Element[]).findIndex(element => element.hasAttribute('visible'));
+    let visibleSectionIndex = this.sectionsAvailable.findIndex(element => {
+      console.log(element, element.hasAttribute('visible'))
+      return element.hasAttribute('visible')
+    });
     let visibleSection: Element = this.sectionsAvailable[visibleSectionIndex];
     let nextSection: Element = this.sectionsAvailable[visibleSectionIndex + 1];
+
+    // console.log(1111111111, visibleSectionIndex, visibleSection, nextSection)
+
 
     const middleScroll = (this.hijacking == 'off' && $(window).scrollTop() != $(visibleSection).offset().top) ? true : false;
 
     if (middleScroll && this.animating && this.animatingType === 'prev') {
-      console.log('middleScroll nextSection', middleScroll)
+      // console.log('middleScroll nextSection', middleScroll)
       visibleSectionIndex--;
       visibleSection = this.sectionsAvailable[visibleSectionIndex];
       nextSection = this.sectionsAvailable[visibleSectionIndex + 1];
@@ -310,11 +315,11 @@ export class SlidesComponent extends UmWebComponent {
       // console.log(anim)
       this.unbindScroll(gotoSection, anim.duration);
       this.animating = true;
-      console.log('animating start')
+      // console.log('animating start')
       Velocity(visibleSection.lastElementChild, anim.goTo, anim.duration, anim.easing);
       Velocity(gotoSection.lastElementChild, anim.visible, anim.duration, anim.easing,
         () => {
-          console.log('animating stop')
+          // console.log('animating stop')
           if (this.animating) {
             visibleSection.removeAttribute('visible');
             gotoSection.setAttribute('visible', '');
@@ -377,8 +382,6 @@ export class SlidesComponent extends UmWebComponent {
    * Update navigation arrows visibility
    */
   checkNavigation() {
-    // console.log('first ', this.sectionsAvailable.first.hasAttribute('visible'))
-    // console.log('last ', this.sectionsAvailable.last.hasAttribute('visible'))
     this.sectionsAvailable[0].hasAttribute('visible')
       ? this.prevArrow.classList.add('inactive')
       : this.prevArrow.classList.remove('inactive');
@@ -414,8 +417,9 @@ export class SlidesComponent extends UmWebComponent {
    * Detect if desktop/mobile
    */
   deviceType() {
-    return window.getComputedStyle(<HTMLBodyElement>document.querySelector('body'), '::before').
-      getPropertyValue('content').replace(/"/g, "").replace(/'/g, "");
+    return 'desktop';
+    // window.getComputedStyle(<HTMLBodyElement>document.querySelector('body'), '::before').
+    //   getPropertyValue('content').replace(/"/g, "").replace(/'/g, "");
   }
 
 

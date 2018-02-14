@@ -1,53 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible"
+      content="ie=edge">
 
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
- 
+  <link href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet">
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+
   <title>Presentarium - dev page</title>
 </head>
 
-  <!-- hijacking: on/off - animation: none/scaleDown/rotate/gallery/catch/opacity/fixed/parallax -->
-  <body data-hijacking="off" data-animation="scaleDown">
+<!-- hijacking: on/off - animation: none/scaleDown/rotate/gallery/catch/opacity/fixed/parallax -->
 
-    <um-slides>
-      <um-slide visible>
-        <div class="slide-main">
-          <div>A</div>
-          <div>R</div>
-          <div>W</div>
-          <div class="header__logoWrapper">
-            <div class="header__logo"></div>
-            <div class="header__logoLine"></div>
-            <div class="header__logoText">Hosting Software</div>
-          </div>
-        </div>
-      </um-slide>
-      
-      <um-slide>
-        <div class="slide1">
-          <div>Создание приложения</div>
-          <div>R</div>
-          <div>W</div>
-          <div class="header__logoWrapper_min">
-            <div class="header__logo"></div>
-            <div class="header__logoLine"></div>
-            <div class="header__logoText">Hosting Software</div>
-          </div>
-        </div>
-      </um-slide>
-      
-      <um-slide>
-        <div class="ok-full">
-        </div>
-      </um-slide>
-    </um-slides>
+<body data-hijacking="off"
+    data-animation="scaleDown">
 
-    <!-- Resource jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  </body>
+  <style>
+    .slide1 {
+      background-color: #2b334f;
+      height: 100%;
+    }
+
+    .slide2 {
+      background-color: #267481;
+      height: 100%;
+    }
+
+    .slide3 {
+      background-color: #262f81;
+      height: 100%;
+    }
+
+    .slide4 {
+      background-color: #fcb052;
+      height: 100%;
+    }
+
+    .slide5 {
+      background-color: #f06a59;
+      height: 100%;
+    }
+  </style>
+
+  <um-slides>
+    <um-slide visible>
+      <div class="slide1">
+        <h2>Section 1</h2>
+      </div>
+    </um-slide>
+
+    <um-slide>
+      <div class="slide2">
+        <h2>Section 2</h2>
+      </div>
+    </um-slide>
+
+    <um-slide>
+      <div class="slide3">
+        <h2>Section 3</h2>
+      </div>
+    </um-slide>
+
+    <um-slide>
+      <div class="slide4">
+        <h2>Section 4</h2>
+      </div>
+    </um-slide>
+
+    <um-slide>
+      <div class="slide5">
+        <h2>Section 5</h2>
+      </div>
+    </um-slide>
+  </um-slides>
+
+  <!-- Resource jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</body>
 
 </html>

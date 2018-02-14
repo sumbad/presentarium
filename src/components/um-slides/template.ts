@@ -1,8 +1,9 @@
 export default (html, scope) => html`
 
-<div>
-  ${{ html: scope.slides }}
-</div>
+<article>
+  <slot></slot>
+</article>
+
 
 <nav>
   <ul class="cd-vertical-nav">
@@ -15,3 +16,5 @@ export default (html, scope) => html`
   </ul>
 </nav>
 `;
+
+// <!--${ { html: scope.slides } } -->

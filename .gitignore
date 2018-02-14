@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+#IDE settings
+.vscode/
+
+# Files for publish
+dist/
