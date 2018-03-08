@@ -3,8 +3,9 @@ const webpack = require('webpack');
 
 
 
-module.exports = function (helper) {
+module.exports = function(helper) {
   return {
+    mode: process.env.NODE_ENV,
     entry: {
       'index': path.resolve(helper.PATHS.src, 'main.ts'),
     },
@@ -15,53 +16,57 @@ module.exports = function (helper) {
     },
     module: {
       rules: [{
-        test: /\.ts$/,
-        use: [{
-          loader: "babel-loader"
-        }, {
-          loader: "ts-loader"
-        }],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: [helper.PATHS.node_modules]
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader',
-        options: {
-          name: '[folder]/[name].[ext]?[hash]'
-        }
-      },
-      {
-        test: /\.(eot|woff|woff2|ttf)(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader?name=[folder]/[name].[ext]',
-      },
-      {
-        test: /\.scss$/,
-        use: [{
-          loader: "raw-loader"
+          test: /\.ts$/,
+          use: [
+            {
+              loader: "babel-loader",
+              options: {
+                babelrc: process.env.NODE_ENV === 'production'
+              }
+            },
+            {
+              loader: "ts-loader"
+            }
+          ],
+          exclude: /node_modules/
         },
         {
-          loader: 'postcss-loader',
+          test: /\.js$/,
+          loader: 'babel-loader',
+          exclude: [helper.PATHS.node_modules]
         },
         {
-          loader: "sass-loader"
-        }
-        ],
-        include: [path.join(helper.PATHS.src, 'components')]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
+          test: /\.(png|jpg|jpeg|gif|svg)(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'file-loader',
+          options: {
+            name: '[folder]/[name].[ext]?[hash]'
+          }
+        },
+        {
+          test: /\.(eot|woff|woff2|ttf)(\?v=\d+\.\d+\.\d+)?$/,
+          use: 'file-loader?name=[folder]/[name].[ext]',
+        },
+        {
+          test: /\.scss$/,
+          use: [{
+              loader: "raw-loader"
+            },
+            {
+              loader: 'postcss-loader',
+            },
+            {
+              loader: "sass-loader"
+            }
+          ],
+          include: [path.join(helper.PATHS.src, 'components')]
+        },
+        {
+          test: /\.css$/,
+          use: [{
             loader: 'raw-loader'
-          },
-        ],
-        include: [path.join(helper.PATHS.src, 'components')]
-      },
+          }, ],
+          include: [path.join(helper.PATHS.src, 'components')]
+        },
       ]
     },
     resolve: {

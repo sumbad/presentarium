@@ -1,5 +1,4 @@
-import { bind, wire } from 'hyperhtml/esm';
-
+import hyperHTML from 'hyperhtml/esm';
 
 
 /**
@@ -7,7 +6,7 @@ import { bind, wire } from 'hyperhtml/esm';
  */
 export abstract class UmWebComponent extends HTMLElement {
   private html: any;
-  protected wire = wire;
+  protected wire = hyperHTML.wire;
   protected props: { [x: string]: string } = {};
 
   protected _template: (html, scope) => any;
@@ -29,15 +28,13 @@ export abstract class UmWebComponent extends HTMLElement {
     }
 
     if (shadow) {
-      this.html = bind(
-        this.attachShadow({ mode })
-      );
+      this.html = hyperHTML.bind(this.attachShadow({ mode }));
     } else {
-      this.html = bind(this);
+      this.html = hyperHTML.bind(this);
     }
 
     if (this._style && this._style !== '') {
-      this._style = wire() `<style>${this._style}</style>`;
+      this._style = hyperHTML.wire() `<style>${this._style}</style>`;
     }
   }
 
@@ -86,7 +83,7 @@ export abstract class UmWebComponent extends HTMLElement {
    * @param scope область видимости в темплейте (this по умолчанию)
    */
   render(scope: any = this): void {
-    this.html`${this._style}${this._template(wire(this), scope)}`;
+    this.html`${this._style}${this._template(hyperHTML.wire(this), scope)}`;
   }
 
 }
