@@ -22,6 +22,8 @@ export class SlidesComponent extends UmWebComponent {
   scrollThreshold: number;
   animationType: string;
   hijacking: string;
+  lastScrollTop = 0;
+  scrollDirectionType: 'down' | 'up';
 
 
   static attributes = ['hijacking', 'animation'];
@@ -136,6 +138,16 @@ export class SlidesComponent extends UmWebComponent {
    * normal scroll - use requestAnimationFrame (if defined) to optimize performance
    */
   scrollAnimation() {
+
+    let st = window.screenY || window.pageYOffset || document.documentElement.scrollTop;
+    if (st > this.lastScrollTop) {
+      this.scrollDirectionType = 'down';
+    } else {
+      this.scrollDirectionType = 'up';
+    }
+    this.lastScrollTop = st;
+
+
     //normal scroll - use requestAnimationFrame (if defined) to optimize performance
     (!window.requestAnimationFrame)
       ? this.animateSection()
@@ -154,7 +166,15 @@ export class SlidesComponent extends UmWebComponent {
 
       this.transformSection(<Element>actualBlock.lastElementChild, animationValues[0], animationValues[1], animationValues[2], animationValues[3], animationValues[4]);
 
-      (offset >= 0 && offset < windowHeight) ? actualBlock.setAttribute('visible', '') : actualBlock.removeAttribute('visible');
+      // console.log(actualBlock);
+      // console.log('offset < windowHeight ' + (offset < windowHeight));
+      // console.log('offset >= 0 ' + (offset >= 0));
+      // console.log('offset', offset);
+      // console.log('windowHeight', windowHeight);
+
+      // (offset >= 0 && offset < windowHeight) ? actualBlock.setAttribute('visible', '') : actualBlock.removeAttribute('visible');
+
+      (Math.abs(offset) < windowHeight) ? actualBlock.setAttribute('visible', '') : actualBlock.removeAttribute('visible');
     });
 
     this.checkNavigation();
@@ -231,16 +251,9 @@ export class SlidesComponent extends UmWebComponent {
    */
   prevSection(event?) {
     typeof event !== 'undefined' && event.preventDefault();
-    let visibleSectionIndex = this.sectionsAvailable.findIndex(element => element.hasAttribute('visible'));
+    let visibleSectionIndex = this.sectionsAvailable.map(element => element.hasAttribute('visible')).lastIndexOf(true);
     let visibleSection: Element = this.sectionsAvailable[visibleSectionIndex];
     let prevSection: Element = this.sectionsAvailable[visibleSectionIndex - 1];
-
-
-    // const scrollTop = window.scrollY || window.pageYOffset;
-    // console.log($(window).scrollTop() != $(visibleSection).offset().top, visibleSection.getBoundingClientRect().top !== 0);
-    // console.log($(window).scrollTop(), $(visibleSection).offset().top);
-    // console.log(scrollTop, visibleSection.getBoundingClientRect().top);
-    // console.log(visibleSection);
 
     const middleScroll = (this.hijacking == 'off' && visibleSection.getBoundingClientRect().top !== 0) ? true : false;
     if (middleScroll && this.animating && this.animatingType === 'next') {
@@ -249,10 +262,12 @@ export class SlidesComponent extends UmWebComponent {
       prevSection = this.sectionsAvailable[visibleSectionIndex - 1];
     }
 
-    // if (!visibleSection.matches(":first-child")) {
     if (prevSection) {
       this.animatingType = 'prev';
       const animationParams = this.selectAnimation(this.animationType, middleScroll, 'prev');
+
+      console.log(visibleSection, prevSection);
+
       this.scrollingToSection(visibleSection, prevSection,
         {
           visible: animationParams[0],
@@ -279,6 +294,7 @@ export class SlidesComponent extends UmWebComponent {
     let nextSection: Element = this.sectionsAvailable[visibleSectionIndex + 1];
 
     const middleScroll = (this.hijacking == 'off' && visibleSection.getBoundingClientRect().top !== 0) ? true : false;
+
 
     if (middleScroll && this.animating && this.animatingType === 'prev') {
       visibleSectionIndex--;
@@ -357,7 +373,7 @@ export class SlidesComponent extends UmWebComponent {
     if (this.hijacking == 'off') {
       window.removeEventListener('scroll', this.scrollAnimation);
 
-      Velocity(section, 'scroll', { duration: time});
+      Velocity(section, 'scroll', { duration: time });
 
       // (this.animationType == 'catch')
       //   ? $('body, html').scrollTop(section.offset().top)
@@ -398,11 +414,10 @@ export class SlidesComponent extends UmWebComponent {
    * On mobile - remove style applied
    */
   resetSectionStyle() {
-    // with jQuery
     (this.sectionsAvailable as Element[]).forEach(element => {
       (element.lastElementChild as Element).setAttribute('style', '');
     });
-
+    // with jQuery
     // ('div').each(() => {
     //   $(this).attr('style', '');
     // });
