@@ -1,12 +1,9 @@
 var path = require('path');
 var webpack = require('webpack');
-// const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-
 
 
 module.exports = function (helper) {
   return {
-    // devtool: '#source-map',
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
@@ -17,10 +14,5 @@ module.exports = function (helper) {
         minimize: true
       })
     ],
-    // optimization: {
-    //   minimizer: [
-    //     new UglifyJSPlugin()
-    //   ]
-    // }
   }
 }
