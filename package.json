@@ -1,6 +1,6 @@
 {
   "name": "presentarium",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "web component for presentations",
   "main": "dist/index.js",
   "scripts": {
