@@ -37,6 +37,12 @@ export class SlidesComponent extends UmWebComponent {
     // special stiles for um-slide component
     const commonStyle = document.createElement('style');
     commonStyle.textContent = require('./common.scss');
+
+    // if a browser doesn't support ShadowDom and uses polyfills ShadyCSS
+    if (typeof window['ShadyCSS'] !== 'undefined' && window['ShadyCSS'].nativeShadow === false) {
+      commonStyle.textContent += require('./fallbackStyle.scss');
+    }
+
     this.insertBefore(commonStyle, this.firstChild);
 
     // const html = this.wire();

@@ -14,11 +14,11 @@ module.exports = function (helper) {
       hints: false
     },
     devtool: '#eval-source-map',
-    plugins: [
-      new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: path.resolve(helper.PATHS.dev, 'index.html'),
-      }),
-    ]
+    // plugins: [
+    //   new HtmlWebpackPlugin({
+    //     filename: 'index.html',
+    //     template: path.resolve(helper.PATHS.dev, 'index.html'),
+    //   }),
+    // ]
   }
 }
