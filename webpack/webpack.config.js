@@ -31,6 +31,17 @@ let PREBUILD_CFG = {
       dry: false,
       verbose: true,
     }),
+    new CopyWebpackPlugin([
+      {
+        from: helper.PATHS.dev + '/index.html',
+        to: path.join(helper.PATHS.dist)
+      },
+      {
+        from: helper.PATHS.dev + '/polyfills',
+        to: path.join(helper.PATHS.dist, 'polyfills', helper.PATHS.outputPath),
+        toType: 'dir'
+      }
+    ]),
   ]
 }
 

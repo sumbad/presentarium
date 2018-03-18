@@ -37,11 +37,16 @@ export class SlidesComponent extends UmWebComponent {
     // special stiles for um-slide component
     const commonStyle = document.createElement('style');
     commonStyle.textContent = require('./common.scss');
+
+    // if a browser doesn't support ShadowDom and uses polyfills ShadyCSS
+    if (typeof window['ShadyCSS'] !== 'undefined' && window['ShadyCSS'].nativeShadow === false) {
+      commonStyle.textContent += require('./fallbackStyle.scss');
+    }
+
     this.insertBefore(commonStyle, this.firstChild);
 
     // const html = this.wire();
     this.slides = this.innerHTML;
-    // console.log(this.slides)
 
     this.scrollAnimation = this.scrollAnimation.bind(this);
     this.nextSection = this.nextSection.bind(this);
@@ -63,7 +68,10 @@ export class SlidesComponent extends UmWebComponent {
     this.sectionsAvailable = Array.from(this.querySelectorAll('um-slide'));//this.wire() `${{ html: this.slides }}`;
 
     this.render();
-    this.registerEffectVelocity();
+    // wait until presentation render will finish
+    setTimeout(() => {
+      this.registerEffectVelocity();
+    });
 
     // this.sectionsAvailable = this.sectionsAvailable.childNodes;
     // $('.cd-section');
@@ -266,8 +274,6 @@ export class SlidesComponent extends UmWebComponent {
       this.animatingType = 'prev';
       const animationParams = this.selectAnimation(this.animationType, middleScroll, 'prev');
 
-      console.log(visibleSection, prevSection);
-
       this.scrollingToSection(visibleSection, prevSection,
         {
           visible: animationParams[0],
@@ -302,7 +308,6 @@ export class SlidesComponent extends UmWebComponent {
       nextSection = this.sectionsAvailable[visibleSectionIndex + 1];
     }
 
-    // if (!visibleSection.matches(":last-of-type")) {
     if (nextSection) {
       this.animatingType = 'next';
       const animationParams = this.selectAnimation(this.animationType, middleScroll, 'next');
@@ -669,8 +674,10 @@ export class SlidesComponent extends UmWebComponent {
   }
 
 
+  /**
+   *  Register effects for Velocity.js library
+   */
   registerEffectVelocity() {
-
     const sectionHeight = (<Element>this.querySelector('um-slide')).getBoundingClientRect().height;
 
     Velocity.RegisterEffect("translateUp", {
