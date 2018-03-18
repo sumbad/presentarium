@@ -18,19 +18,24 @@ let helper = {
     node_modules: path.join(__dirname, '../node_modules'),
     dist: path.join(__dirname, '../dist'),
     publicPath: '',
-    outputPath: ''//process.env.NODE_ENV === 'production' ? 'public/' : ''
+    outputPath: ''
   },
   TARGET: process.env.npm_lifecycle_event
 }
 
 
-let PREBUILD_CFG = {
+let PREBUILD_CFG_PROD = {
   plugins: [
     new CleanPlugin([helper.PATHS.dist], {
       root: helper.PATHS.root,
       dry: false,
       verbose: true,
-    }),
+    })
+  ]
+}
+
+let PREBUILD_CFG_DEV = {
+  plugins: [
     new CopyWebpackPlugin([
       {
         from: helper.PATHS.dev + '/index.html',
@@ -41,13 +46,13 @@ let PREBUILD_CFG = {
         to: path.join(helper.PATHS.dist, 'polyfills', helper.PATHS.outputPath),
         toType: 'dir'
       }
-    ]),
+    ])
   ]
 }
 
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = [merge(PREBUILD_CFG, webpackConfigCommon(helper), webpackConfigProd(helper))];
+  module.exports = [merge(PREBUILD_CFG_PROD, webpackConfigCommon(helper), webpackConfigProd(helper))];
 } else {
-  module.exports = [merge(PREBUILD_CFG, webpackConfigCommon(helper), webpackConfigDev(helper))];
+  module.exports = [merge(PREBUILD_CFG_DEV, webpackConfigCommon(helper), webpackConfigDev(helper))];
 }
