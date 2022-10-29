@@ -1,93 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
 
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+    <title>Presentarium - dev page</title>
+  </head>
 
-  <!-- Load polyfills; note that "loader" will load these async -->
-  <script src="/polyfills/webcomponentsjs/webcomponents-loader.js"></script>
+  <!-- hijacking: on/off - animation: none/scaleDown/rotate/gallery/catch/opacity/fixed/parallax -->
 
-  <title>Presentarium - dev page</title>
-</head>
+  <body data-hijacking="off" data-animation="scaleDown">
+    <style>
+      .slide1 {
+        background-color: #2b334f;
+        height: 100%;
+      }
 
-<!-- hijacking: on/off - animation: none/scaleDown/rotate/gallery/catch/opacity/fixed/parallax -->
+      .slide2 {
+        background-color: #267481;
+        height: 100%;
+      }
 
-<body data-hijacking="off"
-  data-animation="scaleDown">
+      .slide3 {
+        background-color: #262f81;
+        height: 100%;
+      }
 
-  <style>
-    .slide1 {
-      background-color: #2b334f;
-      height: 100%;
-    }
+      .slide4 {
+        background-color: #fcb052;
+        height: 100%;
+      }
 
-    .slide2 {
-      background-color: #267481;
-      height: 100%;
-    }
+      .slide5 {
+        background-color: #f06a59;
+        height: 100%;
+      }
+    </style>
 
-    .slide3 {
-      background-color: #262f81;
-      height: 100%;
-    }
+    <um-slides style="visibility: hidden">
+      <um-slide visible>
+        <div class="slide1">
+          <h2>Section 1</h2>
+        </div>
+      </um-slide>
 
-    .slide4 {
-      background-color: #fcb052;
-      height: 100%;
-    }
+      <um-slide>
+        <div class="slide2">
+          <h2>Section 2</h2>
+        </div>
+      </um-slide>
 
-    .slide5 {
-      background-color: #f06a59;
-      height: 100%;
-    }
-  </style>
+      <um-slide>
+        <div class="slide3">
+          <h2>Section 3</h2>
+        </div>
+      </um-slide>
 
-  <um-slides>
-    <um-slide visible>
-      <div class="slide1">
-        <h2>Section 1</h2>
-      </div>
-    </um-slide>
+      <um-slide>
+        <div class="slide4">
+          <h2>Section 4</h2>
+        </div>
+      </um-slide>
 
-    <um-slide>
-      <div class="slide2">
-        <h2>Section 2</h2>
-      </div>
-    </um-slide>
+      <um-slide>
+        <div class="slide5">
+          <h2>Section 5</h2>
+        </div>
+      </um-slide>
+    </um-slides>
 
-    <um-slide>
-      <div class="slide3">
-        <h2>Section 3</h2>
-      </div>
-    </um-slide>
-
-    <um-slide>
-      <div class="slide4">
-        <h2>Section 4</h2>
-      </div>
-    </um-slide>
-
-    <um-slide>
-      <div class="slide5">
-        <h2>Section 5</h2>
-      </div>
-    </um-slide>
-  </um-slides>
-
-  <!-- Interact with the upgraded element -->
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      var script = document.createElement("script");
-      script.src = "/index.js";
-      script.type = "text/javascript";
-      document.getElementsByTagName("head")[0].appendChild(script);
-    });
-  </script>
-</body>
-
+    <script type="text/javascript" src="/index.js"></script>
+    <script>
+      document.querySelector('um-slides').style.visibility = 'visible';
+    </script>
+  </body>
 </html>

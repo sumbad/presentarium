@@ -8,12 +8,12 @@ module.exports = function (helper) {
   return {
     devServer: {
       historyApiFallback: true,
-      port: 3000,
+      port: 8085,
     },
     performance: {
       hints: false
     },
-    devtool: '#eval-source-map',
+    devtool: 'eval-source-map',
     // plugins: [
     //   new HtmlWebpackPlugin({
     //     filename: 'index.html',

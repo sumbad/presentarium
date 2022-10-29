@@ -1,13 +1,10 @@
 const path = require('path');
-const webpack = require('webpack');
 
-
-
-module.exports = function(helper) {
+module.exports = function (helper) {
   return {
     mode: process.env.NODE_ENV,
     entry: {
-      'index': path.resolve(helper.PATHS.src, 'main.ts'),
+      index: path.resolve(helper.PATHS.src, 'main.ts'),
     },
     output: {
       path: helper.PATHS.dist,
@@ -15,32 +12,33 @@ module.exports = function(helper) {
       filename: '[name].js',
     },
     module: {
-      rules: [{
-          test: /\.ts$/,
+      rules: [
+        {
+          test: /\.ts(x?)$/,
           use: [
             {
-              loader: "babel-loader",
-              options: {
-                babelrc: process.env.NODE_ENV === 'production'
-              }
+              loader: 'babel-loader',
+              // options: {
+              //   babelrc: process.env.NODE_ENV === 'production',
+              // },
             },
             {
-              loader: "ts-loader"
-            }
+              loader: 'ts-loader',
+            },
           ],
-          exclude: /node_modules/
+          exclude: /node_modules/,
         },
         {
           test: /\.js$/,
           loader: 'babel-loader',
-          exclude: [helper.PATHS.node_modules]
+          exclude: [helper.PATHS.node_modules],
         },
         {
           test: /\.(png|jpg|jpeg|gif|svg)(\?v=\d+\.\d+\.\d+)?$/,
           loader: 'file-loader',
           options: {
-            name: '[folder]/[name].[ext]?[hash]'
-          }
+            name: '[folder]/[name].[ext]?[hash]',
+          },
         },
         {
           test: /\.(eot|woff|woff2|ttf)(\?v=\d+\.\d+\.\d+)?$/,
@@ -48,30 +46,27 @@ module.exports = function(helper) {
         },
         {
           test: /\.scss$/,
-          use: [{
-              loader: "raw-loader"
-            },
+          type: 'asset/source',
+          use: [
             {
               loader: 'postcss-loader',
             },
             {
-              loader: "sass-loader"
-            }
+              loader: 'sass-loader',
+            },
           ],
-          include: [path.join(helper.PATHS.src, 'components')]
+          include: [path.join(helper.PATHS.src, 'components')],
         },
         {
           test: /\.css$/,
-          use: [{
-            loader: 'raw-loader'
-          }, ],
-          include: [path.join(helper.PATHS.src, 'components')]
+          type: 'asset/source',
+          include: [path.join(helper.PATHS.src, 'components')],
         },
-      ]
+      ],
     },
     resolve: {
       modules: [helper.PATHS.src, helper.PATHS.node_modules],
-      extensions: ['.ts', '.js', '.json']
-    }
-  }
-}
+      extensions: ['.ts', '.tsx', '.js', '.json'],
+    },
+  };
+};

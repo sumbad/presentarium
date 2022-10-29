@@ -1,4 +1,4 @@
-um-slide:first-of-type>section::before {
+:host:first-of-type > section::before {
   /* alert -> all scrolling effects are not visible on small devices */
   content: 'Effects not visible on mobile!';
   position: absolute;
@@ -12,13 +12,13 @@ um-slide:first-of-type>section::before {
   color: #6a7083;
 }
 
-um-slide-content {
+:host > section {
   height: 100vh;
   display: block;
 }
 
 @media only screen and (min-width: 1050px) {
-  um-slide>section {
+  :host > section {
     opacity: 0;
     position: fixed;
     top: 0;
@@ -33,7 +33,7 @@ um-slide-content {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
-  um-slide:first-of-type>section::before {
+  :host:first-of-type > section::before {
     display: none;
   }
 }

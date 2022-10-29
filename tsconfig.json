@@ -23,7 +23,9 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "rootDir": "./",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "jsx": "preserve",
   },
-  "compileOnSave": false
+  "compileOnSave": false,
+  "exclude": ["postcss.config.js", "webpack"]
 }
